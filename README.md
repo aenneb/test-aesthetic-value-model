@@ -59,7 +59,7 @@ The main directory also contains some .py files that contain helper functions an
 
 simExperiment.py contains the most basic model functionality and calculates the aesthetic value.
 
-fitPilot.py coontains model functionality that is needed for fitting rating data.
+fitPilot.py contains model functionality that is needed for fitting rating data.
 
 figureFunctions.py is a collection of functions that help with visualization. Here, we only use scatter_model_comparison().
 
