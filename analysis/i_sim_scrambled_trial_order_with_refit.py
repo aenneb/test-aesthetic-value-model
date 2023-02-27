@@ -33,12 +33,6 @@ save = False
 niter = 100
 n_base_stims = 7
 
-exampleSubj = ['kwqcc', '7df33']
-sigBetterWithLearn3D = ['mrx1q', 'oveao', 'quzfn', 'zv0ou']
-sigBetterWithLearn2D = ['37o95', '6r8qk', '9gjbe', 'h647a', 'jmzs9',
-                        'mbx6w', 'mrx1q', 'ms8r4', 'n0htt', 'njzz4',
-                        'nq3sp', 'zv0ou']
-
 # %% ---------------------------------------------------------
 # Load results
 # ------------------------------------------------------------
@@ -84,7 +78,7 @@ if 'vgg' in modelSpec:
     featureDf = pd.read_pickle(dataDir
                                + '/vgg_features/vgg_features_reduced_to_'
                                + str(n_features) + '.pkl')
-    # now create an array that contains featuers of the images in correct order
+    # now create an array that contains features of the images in correct order
     for imgInd in np.unique(df.imageInd):
         img = np.unique(df.image[df.imageInd == imgInd])[0]
         if imgInd == 0:
@@ -150,7 +144,7 @@ resList = []
 peepList = []
 counter = 0
 
-for peep in participantList[:1]:
+for peep in participantList:
     ratingData = df[df.subj == peep]
 
     res = np.load(dataDir + 'results/individuals/' + 'fit_' + peep
