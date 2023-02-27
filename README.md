@@ -24,6 +24,35 @@ python a_get_complete_data.py #etc
 
 You should then be able to run any of the analysis scripts. You will also note the `requirements.txt` file which lists all packages that are required to run all scripts. NOTE that pingouin may not be compatible with the latest numpy version. To run the analyses that require pingouin, downgrade your environment's numpy version to < 1.24.
 
+## Which code to run and what it does
+
+In general, you can run all analysis code in alphabetical order as indicated by the prefix in front of the .py files to replicate all analyses.
+
+NOTE that running model fits is expensive and may take a long time.
+
+a_get_complete_data.py reads in raw data files and converts them into usable .csv files.
+
+b_get_descriptives_ratings.py gives you a few summary stats about the ratings (ICC, distribution per image, checks normal distribution).
+
+c_get_descriptives_participants.py gives you information about individual participants' answers at the end of the experiment and the correlations between ratings and initial slider positions.
+
+d_fit_custom_model_ratings_cv.py fits one version of the model to all participants and saves the results.
+
+e_evaluate_costum_model_fits.py fetches the individual model fitting results and stores them in a summary .csv for later use.
+
+f_merge_fit_results_participantInfo_cv.py merges the summary of the model fit results of all variations with the general participant info and saves it as 'perParticipantResults_cv.csv'.
+
+g_get_leaveOneOut_Average_predictions.py computes the predictions for the LOO-average baseline model and appends it to the same file that contains summaries of all model fits (perParticipantResults_cv.csv).
+
+h_compare_models_cv.py does a preliminary model comparison with t-test and identifies the nominally best model per participant.
+
+i_sim_scrambled_trial_order_with_refit.py simulates data using fit model parameters in a scrambled order, evaluates the resulting RMSE and R-squared and saves these results.
+
+j_eval_sim_scrambled_trial_order_with_refit.py evaluates the results of the simulated scrambled order fits and compares the results to the true-order fits.
+
+k_model_selection_cv.py performs proper model comparison using rmmANOVAs.
+
+
 
 # Folder content
 
