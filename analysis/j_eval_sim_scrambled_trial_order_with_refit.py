@@ -1,6 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
+Compare (average) simulated scrambled fits to true-order predictions.
+
+It is not ideal, but we have to re-calculate true-order predictions, here.
+In a perfect world I would have fetched and saved these earlier, alas, this
+is not what happened (and it does not take a lot of time).
+
 Created on Tue Jun 21
 @author: aennebrielmann
 """
@@ -131,6 +137,9 @@ nParams = len(bounds)
 
 # %% ---------------------------------------------------------
 # fetch and save predictions for the entire experiment based on best model
+# fot the true trial order
+# While wee are at it, we create a df that contain both average shuffled and
+# true trial order RMSE and r values.
 # ------------------------------------------------------------
 resDict = {'r_true': [], 'r_shuffled': [],
            'rmse_shuffled': [], 'rmse_true': [],
