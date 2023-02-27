@@ -53,6 +53,18 @@ j_eval_sim_scrambled_trial_order_with_refit.py evaluates the results of the simu
 k_model_selection_cv.py performs proper model comparison using rmmANOVAs.
 
 
+## Meaning and use of other scripts
+
+The main directory also contains some .py files that contain helper functions and necessary components from the core package.
+
+simExperiment.py contains the most basic model functionality and calculates the aesthetic value.
+
+fitPilot.py coontains model functionality that is needed for fitting rating data.
+
+figureFunctions.py is a collection of functions that help with visualization. Here, we only use scatter_model_comparison().
+
+plot_images_inVGGspace.py visualizes the location of the stimulus images in reduced DNN-feature space. It is not used for anything presented in the paper but I thought you might be curious about what these DNN features mean (like I have been).
+
 
 # Folder content
 
