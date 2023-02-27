@@ -132,6 +132,8 @@ if dnnFeatures == '':
 nParams = len(bounds)
 
 # get a list of pairs (excluding source images)
+# this list serves to define our CV-splits where one pair is left out as
+# the test pair for each CV-split
 tmp = df.pair.unique().tolist()
 sourceImInds = [tmp.index(im) for im in ['5', '37', '41', '57', '64',
                                          '92', '101']]
@@ -212,7 +214,8 @@ def cost_fn(parameters, data, testPair, test=False):
 
 def L2_const(parameters):
     """
-    Applis L2 regularisation to the means of the system state.
+    Applies L2 regularisation to the means of the system state.
+
     see also: https://towardsdatascience.com/l1-and-l2-regularization-methods-ce25e7fc831c
 
     Parameters
@@ -281,7 +284,6 @@ for peep in participantList[:]:
         # preliminaries
         print('Fitting data of ' + peep)
         resList = []
-        rmseFitList = []
         rmsePredList = []
         testPairList = []
 
@@ -315,7 +317,6 @@ for peep in participantList[:]:
                 tmp_rmse.append(thisRes.fun)
             res = tmp_res[tmp_rmse.index(np.nanmin(tmp_rmse))]
             resList.append(res)
-            rmseFitList.append(res.fun)
             testPairList.append(testPair)
 
             rmse_test = cost_fn(res.x, data.iloc[:55], testPair, test=True)
@@ -356,7 +357,7 @@ for peep in participantList[:]:
         plt.close()
 
 # %% ---------------------------------------------------------
-# Save
+# Save the parameters from the best-predicting fit for each individual
 # ------------------------------------------------------------
     if save:
         np.save(dataDir + 'results/individuals/fit_'
@@ -370,7 +371,7 @@ for peep in participantList[:]:
                 + '.npy', bestParams)
 
 # %% ---------------------------------------------------------
-# Res dict to pandas dataframe and save as .csv
+# Sve the overall res dict to pandas dataframe and save as .csv
 # ------------------------------------------------------------
 if save:
     resDf = pd.DataFrame(resDict)
