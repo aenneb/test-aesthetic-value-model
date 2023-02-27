@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Perform proper model comparison using rmmANOVAs.
+Perform proper model comparison using rmANOVAs.
 
 Also prints the associatted tables that are included in the ms.
 
