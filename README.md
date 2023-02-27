@@ -10,7 +10,8 @@ If you want to replicate all analyses, you can run all scripts located in the "a
 
 If you want run the code, try the following steps:
 
-``git clone https://github.com/aenneb/test-aesthetic-value-model.git 
+```
+git clone https://github.com/aenneb/test-aesthetic-value-model.git 
 cd test-aesthetic-value-model 
 python -m venv .env 
 .env/Scripts/activate # windows
@@ -18,7 +19,8 @@ python -m venv .env
 source .env/bin/activate # mac/linux
 pip install -r requirements.txt 
 cd analysis 
-python a_get_complete_data.py #etc``
+python a_get_complete_data.py #etc
+```
 
 You should then be able to run any of the analysis scripts. You will also note the `requirements.txt` file which lists all packages that are required to run all scripts. NOTE that pingouin may not be compatible with the latest numpy version. To run the analyses that require pingouin, downgrade your environment's numpy version to < 1.24.
 
