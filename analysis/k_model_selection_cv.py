@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
+Perform proper model comparison using rmmANOVAs.
+
+Also prints the associatted tables that are included in the ms.
+
 Created on Wed Jan 20 2022
 
 @author: aennebrielmann
@@ -10,20 +14,20 @@ import os
 import pandas as pd
 import seaborn as sns
 from matplotlib import pyplot as plt
-import pingouin as pg # statistical tests
+import pingouin as pg  # statistical tests
 
-#%% ---------------------------------------------------------
+# %% ---------------------------------------------------------
 # Specify directories; settings
-#------------------------------------------------------------
+# ------------------------------------------------------------
 os.chdir('..')
 homeDir = os.getcwd()
 dataDir = homeDir + '/'
 resDir = dataDir + 'results/individuals/'
 save = True
 
-#%% ---------------------------------------------------------
+# %% ---------------------------------------------------------
 # Load results; reshape
-#------------------------------------------------------------
+# ------------------------------------------------------------
 df = pd.read_csv(dataDir + '/perParticipantResults_cv.csv')
 
 longDf = pd.wide_to_long(df,
@@ -31,12 +35,12 @@ longDf = pd.wide_to_long(df,
                          i=df.columns[:18],
                          j='model', sep='_', suffix='.*')
 longDf = longDf.reset_index()
-longDf['model'] = longDf['model'].str.replace('_results_','')
-longDf['model'] = longDf['model'].str.replace('ure','')
+longDf['model'] = longDf['model'].str.replace('_results_', '')
+longDf['model'] = longDf['model'].str.replace('ure', '')
 
-#%% ---------------------------------------------------------
+# %% ---------------------------------------------------------
 # descriptives
-#------------------------------------------------------------
+# ------------------------------------------------------------
 print(longDf.groupby('model')['med_rmse'].median())
 
 fig = sns.stripplot(data=longDf, x='model', y='med_rmse',
@@ -48,12 +52,14 @@ sns.despine()
 plt.show()
 plt.close()
 
-#%% ---------------------------------------------------------
+# %% ---------------------------------------------------------
 # ANOVA across participants
 # -----------------------------------------------------------
 
 # test assumptions
-spher = pg.sphericity(dv='med_rmse', within='model', subject='subj', data=longDf)
+# unused as of now but remains here as a reminder of assumptions
+spher = pg.sphericity(dv='med_rmse', within='model', subject='subj',
+                      data=longDf)
 normal = pg.normality(dv='med_rmse', group='model', data=longDf)
 
 res = pg.rm_anova(dv='med_rmse', within='model', subject='subj', data=longDf,
@@ -63,20 +69,22 @@ print(res)
 postHocs = pg.pairwise_ttests(dv='med_rmse', within='model', subject='subj',
                               data=longDf, padjust='bonf')
 postHocTable = postHocs.dropna()
+
+# create a table to print to latex to paste into the manuscript
 printTable = postHocTable[['A', 'B', 'T', 'p-corr', 'BF10', 'hedges']]
 print(printTable.to_latex(float_format="{:.3f}".format))
 
-#%% ---------------------------------------------------------
+# %% ---------------------------------------------------------
 # best model per participant
 # -----------------------------------------------------------
 peeps = []
 bestRMSE = []
 bestModel = []
 for peep in longDf.subj.unique():
-    thisDf = longDf[longDf.subj==peep]
+    thisDf = longDf[longDf.subj == peep]
     minRMSE = thisDf.med_rmse.min()
     bestRMSE.append(minRMSE)
-    bestModel.extend(longDf[longDf.med_rmse==minRMSE].model.values)
+    bestModel.extend(longDf[longDf.med_rmse == minRMSE].model.values)
     peeps.append(peep)
 bestDf = pd.DataFrame({'subj': peeps, 'min_rmse': bestRMSE,
                        'best model': bestModel})
@@ -96,10 +104,11 @@ plt.close()
 counts = bestDf['best model'].value_counts()
 tableDf = bestDf.groupby(['best model']).median()
 tableDf['N'] = counts
-# tableDf.reset_index(inplace=True)
+
+# We again print this table to latex because we want to paste into the ms
 print(tableDf.to_latex(float_format="{:0.2f}".format))
 
-#%% ---------------------------------------------------------
+# %% ---------------------------------------------------------
 # attach best model per participant to .csv
 # -----------------------------------------------------------
 df['bestModel'] = bestDf['best model']
