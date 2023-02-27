@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
+Do a preliminary, descriptive comparison between models.
+
 Created on Tue Oct 26 2021
 Last updated Feb 04 2022: adapted for cv fits
 @author: aennebrielmann
@@ -40,7 +42,7 @@ longDf['model'] = longDf['model'].str.replace('ure', '', regex=True)
 longDf['model'] = longDf['model'].str.replace('glm_rating ~', '', regex=True)
 
 # %% ---------------------------------------------------------
-# Plot
+# Create a scatter plot comparing all median model RMSEs to LOO-avg RMSE
 # ------------------------------------------------------------
 plotDf = longDf.copy()
 plotDf['model'] = pd.Categorical(plotDf.model)
@@ -73,10 +75,12 @@ if plot:
 # ------------------------------------------------------------
 tableDf = pd.DataFrame(longDf.groupby(['model'])['med_rmse'].median())
 tableDf['RMSE SD'] = longDf.groupby(['model'])['med_rmse'].std()
+# latex format because we want to paste this into the manuscript
 print(tableDf.to_latex(float_format="{:0.3f}".format))
 
 # %% ---------------------------------------------------------
-# run paired t-tests
+# run paired t-tests betweeen all models and LOO-avg.
+# just as a preliminary check on possibly meaningful differences.
 # ------------------------------------------------------------
 for model in plotDf.model.unique():
     _, p = stats.shapiro(plotDf[plotDf.model == model]['med_rmse'])
