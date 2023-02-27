@@ -28,6 +28,10 @@ df = infoDf.copy()
 
 for file in allResFiles:
     modelDf = pd.read_csv(file)
+
+    # Generate a modelSpec string
+    # We get that info from the file name but we want to remove all the parts
+    # that do not identify the model from the string.
     modelSpec = file.replace(dataDir+'/results', '')
     # windows/OS encoding differs a little in use of \\ vs /
     # remove both
@@ -37,8 +41,12 @@ for file in allResFiles:
     modelSpec = modelSpec.replace('cv', '')
     modelSpec = modelSpec.replace('_results', '')
     modelSpec = modelSpec.replace('_paper_draftmodel', '')
+    # add the model specification to the resDf variables before merging
+    # so we know which model the valuees belong to.
     resDf = modelDf.iloc[:, -5:-1].add_suffix(modelSpec)
+    # add a subject identifier to the resDf to ensure proper merging
     resDf['subj'] = modelDf['subj'].copy()
+    # merge current resDf to infoDf
     df = pd.merge(df, resDf, on='subj')
 
 # save this as a new, merged data frame
